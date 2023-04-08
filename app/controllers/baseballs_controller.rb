@@ -10,9 +10,9 @@ class BaseballsController < ApplicationController
   end
 
   def create
-    @baseball.create(
-      player: params[:params],
-      team: params[:index],
+    @baseball = Baseball.create(
+      player: params[:player],
+      team: params[:team],
       number: params[:number]
     )
     @baseball.save
@@ -20,4 +20,17 @@ class BaseballsController < ApplicationController
   end
    
   def update
+    @baseball = Baseball.find_by(id: params[:id])
+    @baseball.player = params[:player] || @baseball.player
+    @baseball.team = params[:team] || @baseball.team
+    @baseball.number = params[:number] || @baseball.number
+    @baseball.save
+    render :show
+  end
+
+  def destroy
+    @baseball = Baseball.find_by(id: params[:id])
+    @baseball.destroy
+    render json: {message: "Player has been removed"}
+  end
 end
